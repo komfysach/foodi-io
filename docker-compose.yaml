@@ -1,0 +1,56 @@
+version: '3.9'
+services: 
+    backend:
+        build: .
+        ports: 
+            - 8000:8000
+        volumes:
+            - .:/app
+
+    db:
+        image: postgres
+        restart: always
+        volumes:
+        - .db_data:/var/lib/postgresql
+        environment:
+            POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+            PGADMIN_DEFAULT_USER: "${PGADMIN_DEFAULT_USER}"
+            PGADMIN_DEFAULT_DBNAME: "${PGADMIN_DEFAULT_DBNAME}"
+            PGADMIN_DEFAULT_HOST: "${PGADMIN_DEFAULT_HOST}"
+            PGADMIN_DEFAULT_PORT: "${PGADMIN_DEFAULT_PORT}"
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+
+        # pgadmin:
+        #     image: dpage/pgadmin4
+        #     restart: always
+        #     depends_on:
+        #     - postgres
+        #     ports:
+        #     - 5050:80
+        # ## you can change pgAdmin default username/password with below environment variables
+        #     environment:
+        #         PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
+        #         PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
+        # graphql-engine:
+        #     image: hasura/graphql-engine:v2.0.9
+        #     ports:
+        #     - "8080:8080"
+        #     depends_on:
+        #     - "postgres"
+        #     restart: always
+        #     environment:
+        #         ## postgres database to store Hasura metadata
+        #         HASURA_GRAPHQL_METADATA_DATABASE_URL: "${HASURA_GRAPHQL_METADATA_DATABASE_URL}"
+        #         HASURA_GRAPHQL_DATABASE_URL: "${HASURA_GRAPHQL_DATABASE_URL}"
+        #         ## enable the console served by server
+        #         HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+        #         ## enable debugging mode. It is recommended to disable this in production
+        #         HASURA_GRAPHQL_DEV_MODE: "true"
+        #         ## uncomment next line to set an admin secret
+        #         HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+    
